@@ -15,7 +15,7 @@ fi
 
 host=$( /bin/hostname -s )
 
-LOGFOLDER="/private/var/log/cs"
+LOGFOLDER="/private/var/log/"
 LOG=$LOGFOLDER"/Centrify-AD-Bind.log"
 
 if [ ! -d "$LOGFOLDER" ];
