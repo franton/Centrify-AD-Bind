@@ -13,7 +13,7 @@ then
 	exit 1
 fi
 
-host=$( hostname -s )
+host=$( /bin/hostname -s )
 
 LOGFOLDER="/private/var/log/cs"
 LOG=$LOGFOLDER"/Centrify-AD-Bind.log"
