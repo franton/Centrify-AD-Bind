@@ -3,7 +3,8 @@
 adbindact="$3"
 adbindpwd="$4"
 domain="$5"
-ldappath="$6"
+ltldappath="$6"
+dkldappath="$7"
 
 host=$( /bin/hostname -s )
 
@@ -31,13 +32,14 @@ fi
 
 logme "Centrify AD Bind Script"
 
-if [ -z "$adbindact" ] || [ -z "$adbindpwd" ] || [ -z "$domain" ] || [ -z "$ldappath" ];
+if [ -z "$adbindact" ] || [ -z "$adbindpwd" ] || [ -z "$domain" ] || [ -z "$ltldappath" || -z "$dkldappath" ];
 then
 	logme "Missing parameter!"
 	logme "AD account: $adbindact"
 	logme "AD password: $adbindpwd"
 	logme "AD domain: $domain"
-	logme "LDAP path: $ldappath"
+	logme "Laptop LDAP path: $ltldappath"
+	logme "Desktop LDAP path: $dkldappath"
 	cat ${LOG}
 	exit 1
 fi
@@ -52,13 +54,13 @@ then
 	logme "Binding a laptop computer"
 	logme "Domain: $domain"
 	logme "Hostname: $host"
-	/usr/local/sbin/adjoin -w -u $adbindact -p $adbindpwd -c $ldappath -n $host $domain 2>&1 | tee -a ${LOG}
+	/usr/local/sbin/adjoin -w -u $adbindact -p $adbindpwd -c $ltldappath -n $host $domain 2>&1 | tee -a ${LOG}
 else
 	# Desktop bind here
 	logme "Binding a desktop computer"
 	logme "Domain: $domain"
 	logme "Hostname: $host"
-	/usr/loca/sbin/adjoin -w -u $adbindact -p $adbindpwd -c $ldappath -n $host $domain 2>&1 | tee -a ${LOG}
+	/usr/loca/sbin/adjoin -w -u $adbindact -p $adbindpwd -c $dkldappath -n $host $domain 2>&1 | tee -a ${LOG}
 fi
 
 # Update, reload and flush AD settings
