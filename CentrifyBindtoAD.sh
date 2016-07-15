@@ -1,29 +1,11 @@
 #!/bin/bash
 
+# Script to perform a Centrify AD bind
+
 adbindact="$3"
 adbindpwd="$4"
 domain="$5"
-
-if [ -z "$adbindact" ] || [ -z "$adbindpwd" ] || [ -z "$domain" ];
-then
-	echo "Missing parameter!"
-	echo "AD account: $adbindact"
-	echo "AD password: $adbindpwd"
-	echo "AD domain: $domain"
-	exit 1
-fi
-
-host=$( /bin/hostname -s )
-
-LOGFOLDER="/private/var/log/"
-LOG=$LOGFOLDER"/Centrify-AD-Bind.log"
-
-if [ ! -d "$LOGFOLDER" ];
-then
-	mkdir $LOGFOLDER
-fi
-
-# Set functions here
+ldappath="$6"
 
 function logme()
 {
@@ -39,7 +21,27 @@ function logme()
 	/bin/echo "" >> $LOG
 }
 
-echo "Centrify AD Bind Script - started at "$( date ) > $LOG
+if [ -z "$adbindact" ] || [ -z "$adbindpwd" ] || [ -z "$domain" ] || [ -z "$ldappath" ];
+then
+	logme "Missing parameter!"
+	logme "AD account: $adbindact"
+	logme "AD password: $adbindpwd"
+	logme "AD domain: $domain"
+	logme "LDAP path: $ldappath"
+	exit 1
+fi
+
+host=$( /bin/hostname -s )
+
+LOGFOLDER="/private/var/log/cs"
+LOG=$LOGFOLDER"/Centrify-AD-Bind.log"
+
+if [ ! -d "$LOGFOLDER" ];
+then
+	mkdir $LOGFOLDER
+fi
+
+logme "Centrify AD Bind Script"
 
 # Is computer a desktop or laptop?
 
@@ -51,13 +53,13 @@ then
 	logme "Binding a laptop computer"
 	logme "Domain: $domain"
 	logme "Hostname: $host"
-	/usr/local/sbin/adjoin -w -u $adbindact -p $adbindpwd -c "OU=" -n $host $domain | tee -a ${LOG}
+	/usr/local/sbin/adjoin -w -u $adbindact -p $adbindpwd -c $ldappath -n $host $domain | tee -a ${LOG}
 else
 	# Desktop bind here
 	logme "Binding a desktop computer"
 	logme "Domain: $domain"
 	logme "Hostname: $host"
-	/usr/loca/sbin/adjoin -w -u $adbindact -p $adbindpwd -c "OU=" -n $host $domain | tee -a ${LOG}
+	/usr/loca/sbin/adjoin -w -u $adbindact -p $adbindpwd -c $ldappath -n $host $domain | tee -a ${LOG}
 fi
 
 # Update, reload and flush AD settings
