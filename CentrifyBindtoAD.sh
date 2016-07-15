@@ -53,23 +53,23 @@ then
 	logme "Binding a laptop computer"
 	logme "Domain: $domain"
 	logme "Hostname: $host"
-	/usr/local/sbin/adjoin -w -u $adbindact -p $adbindpwd -c $ldappath -n $host $domain | tee -a ${LOG}
+	/usr/local/sbin/adjoin -w -u $adbindact -p $adbindpwd -c $ldappath -n $host $domain 2>&1 | tee -a ${LOG}
 else
 	# Desktop bind here
 	logme "Binding a desktop computer"
 	logme "Domain: $domain"
 	logme "Hostname: $host"
-	/usr/loca/sbin/adjoin -w -u $adbindact -p $adbindpwd -c $ldappath -n $host $domain | tee -a ${LOG}
+	/usr/loca/sbin/adjoin -w -u $adbindact -p $adbindpwd -c $ldappath -n $host $domain 2>&1 | tee -a ${LOG}
 fi
 
 # Update, reload and flush AD settings
 
 logme "Enabling Centrify Licenced features"
-/usr/local/bin/adlicense --licensed
+/usr/local/bin/adlicense --licensed 2>&1 | tee -a ${LOG}
 logme "Reloading AD settings"
-/usr/local/sbin/adreload | tee -a ${LOG}
+/usr/local/sbin/adreload 2>&1 | tee -a ${LOG}
 logme "Flushing AD settings"
-/usr/local/sbin/adflush | tee -a ${LOG}
+/usr/local/sbin/adflush 2>&1 | tee -a ${LOG}
 
 # Wait 5 seconds and quit
 
