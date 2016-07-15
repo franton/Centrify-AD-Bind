@@ -32,7 +32,7 @@ fi
 
 logme "Centrify AD Bind Script"
 
-if [ -z "$adbindact" ] || [ -z "$adbindpwd" ] || [ -z "$domain" ] || [ -z "$ltldappath" || -z "$dkldappath" ];
+if [ -z "$adbindact" ] || [ -z "$adbindpwd" ] || [ -z "$domain" ] || [ -z "$ltldappath" ] || [ -z "$dkldappath" ];
 then
 	logme "Missing parameter!"
 	logme "AD account: $adbindact"
