@@ -38,6 +38,7 @@ then
 	logme "AD password: $adbindpwd"
 	logme "AD domain: $domain"
 	logme "LDAP path: $ldappath"
+	cat ${LOG}
 	exit 1
 fi
 
