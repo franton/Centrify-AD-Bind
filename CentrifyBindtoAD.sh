@@ -1,10 +1,10 @@
 #!/bin/bash
 
-adbindact="$3"
-adbindpwd="$4"
-domain="$5"
-ltldappath="$6"
-dkldappath="$7"
+adbindact="$4"
+adbindpwd="$5"
+domain="$6"
+ltldappath="$7"
+dkldappath="$8"
 
 host=$( /bin/hostname -s )
 
