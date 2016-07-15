@@ -20,7 +20,7 @@ function logme()
 	fi
 
 # Log the passed details
-	/bin/echo $( /bindate )" - "$1 >> $LOG
+	/bin/echo $( /bin/date )" - "$1 >> $LOG
 	/bin/echo "" >> $LOG
 }
 
