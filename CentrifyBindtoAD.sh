@@ -1,11 +1,14 @@
 #!/bin/bash
 
-# Script to perform a Centrify AD bind
-
 adbindact="$3"
 adbindpwd="$4"
 domain="$5"
 ldappath="$6"
+
+host=$( /bin/hostname -s )
+
+LOGFOLDER="/private/var/log"
+LOG=$LOGFOLDER"/Centrify-AD-Bind.log"
 
 function logme()
 {
@@ -21,6 +24,13 @@ function logme()
 	/bin/echo "" >> $LOG
 }
 
+if [ ! -d "$LOGFOLDER" ];
+then
+	mkdir $LOGFOLDER
+fi
+
+logme "Centrify AD Bind Script"
+
 if [ -z "$adbindact" ] || [ -z "$adbindpwd" ] || [ -z "$domain" ] || [ -z "$ldappath" ];
 then
 	logme "Missing parameter!"
@@ -30,18 +40,6 @@ then
 	logme "LDAP path: $ldappath"
 	exit 1
 fi
-
-host=$( /bin/hostname -s )
-
-LOGFOLDER="/private/var/log/cs"
-LOG=$LOGFOLDER"/Centrify-AD-Bind.log"
-
-if [ ! -d "$LOGFOLDER" ];
-then
-	mkdir $LOGFOLDER
-fi
-
-logme "Centrify AD Bind Script"
 
 # Is computer a desktop or laptop?
 
