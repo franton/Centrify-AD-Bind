@@ -1,10 +1,11 @@
 #!/bin/bash
 
+# Centrify AD binding script for Casper / macOS
+
 adbindact="$4"
 adbindpwd="$5"
 domain="$6"
-ltldappath="$7"
-dkldappath="$8"
+ldappath="$7"
 
 host=$( /bin/hostname -s )
 
@@ -22,7 +23,6 @@ function logme()
 
 # Log the passed details
 	/bin/echo $( /bin/date )" - "$1 >> $LOG
-	/bin/echo "" >> $LOG
 }
 
 if [ ! -d "$LOGFOLDER" ];
@@ -30,38 +30,23 @@ then
 	mkdir $LOGFOLDER
 fi
 
-logme "Centrify AD Bind Script"
+echo $( /bin/date )" - Centrify AD Bind Script" > $LOG
 
-if [ -z "$adbindact" ] || [ -z "$adbindpwd" ] || [ -z "$domain" ] || [ -z "$ltldappath" ] || [ -z "$dkldappath" ];
+if [ -z "$adbindact" ] || [ -z "$adbindpwd" ] || [ -z "$domain" ] || [ -z "$ldappath" ];
 then
 	logme "Missing parameter!"
 	logme "AD account: $adbindact"
 	logme "AD password: $adbindpwd"
 	logme "AD domain: $domain"
-	logme "Laptop LDAP path: $ltldappath"
-	logme "Desktop LDAP path: $dkldappath"
+	logme "LDAP path: $ldappath"
 	cat ${LOG}
 	exit 1
 fi
 
-# Is computer a desktop or laptop?
-
-model=$( /usr/sbin/sysctl -n hw.model | grep "Book" )
-
-if [ "$model" != "" ];
-then
-	# Laptop bind here
-	logme "Binding a laptop computer"
-	logme "Domain: $domain"
-	logme "Hostname: $host"
-	/usr/local/sbin/adjoin -w -u $adbindact -p $adbindpwd -c $ltldappath -n $host $domain 2>&1 | tee -a ${LOG}
-else
-	# Desktop bind here
-	logme "Binding a desktop computer"
-	logme "Domain: $domain"
-	logme "Hostname: $host"
-	/usr/loca/sbin/adjoin -w -u $adbindact -p $adbindpwd -c $dkldappath -n $host $domain 2>&1 | tee -a ${LOG}
-fi
+logme "Binding computer to AD"
+logme "Domain: $domain"
+logme "Hostname: $host"
+/usr/local/sbin/adjoin -w -u $adbindact -p $adbindpwd -c "$ldappath" -n $host $domain 2>&1 | tee -a ${LOG}
 
 # Update, reload and flush AD settings
 
